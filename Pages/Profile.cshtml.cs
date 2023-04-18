@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using rp_ef_maria.Models;
 
 namespace rp_ef_maria.Pages;
@@ -19,19 +20,20 @@ public class ProfileModel : PageModel
         _context = context;
     }
 
-    public async Task<IActionResult> OnGetAsync()
+    public void OnGet()
     {
-        return Page();
+        return;
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            var suser = _context.SiteUser.FirstOrDefault(u => u.SiteUserId == 1);
 
-
+            _context.Attach(SiteUser).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
+        return Page();
     }
 }
 
